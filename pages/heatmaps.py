@@ -65,7 +65,7 @@ def app():
 
     if metric_option == list(metrics.keys())[0]:
         mid = ceil((min_year+max_year)/2)
-        value = st.slider("Selecione o ano", min_year, max_year, value = (mid-2, mid+2),step=1)
+        value = st.slider("Selecione o intervalo de anos", min_year, max_year, value = (mid-2, mid+2),step=1)
     elif metric_option != list(metrics.keys())[2]:
         value = st.slider("Selecione o ano", min_year, max_year, value = ceil((min_year+max_year)/2),step=1)
         #st.write(value)
@@ -79,7 +79,7 @@ def app():
             return '3'
         elif x <= (4/5)*max:
             return '4'
-        elif x <= (5/5)*max:
+        elif x <= max+1:
             return '5'
 
     if metric_option == list(metrics.keys())[1]:
@@ -146,7 +146,8 @@ def app():
         ).add_selection(selection)
         st.altair_chart(plot)
     else:
-        with st.columns((0.5,5,0.5))[1]:
+        cll1, cll2, cll3 =  st.columns((0.5,5,1))
+        with cll2:
             filteredd = fire[fire['ano'].isin(value)]
             filteredd['classes'] =filteredd['n_incendios'].apply(lambda x: classes(x, filteredd['n_incendios'].max()))
             #st.write(fire)
@@ -154,23 +155,53 @@ def app():
                     x=alt.X('mes:N', title='Mês', sort=[i.capitalize() for i in meses]),
                     y=alt.Y('estado:N', title="Estado"),
                     #color=alt.Color(f'{metrics[metric_option][0]}:Q', title='Quantidade de Incêndios',
-                    color=alt.Color(f'classes:N', title='Quantidade de Incêndios', legend=alt.Legend()
+                    color=alt.Color(f'classes:N', title='Quantidade de Incêndios', legend=alt.Legend(),
                     #legend=alt.Legend()
-                    ),
+                    scale=alt.Scale(scheme='category10')),
                     #color='n_incendios:Q',
-                tooltip=[alt.Tooltip(metrics[metric_option][0], title=metric_option), alt.Tooltip('estado', title='Estado'), alt.Tooltip('mes', title='Mês')]
+                tooltip=[alt.Tooltip(metrics[metric_option][0], title=metric_option), alt.Tooltip('estado', title='Estado'), 
+                        alt.Tooltip('mes', title='Mês'), alt.Tooltip('classes', title='Classe')]
                 #tooltip=[alt.Tooltip('n_incendios', title='Queimadas'), alt.Tooltip('estado', title='Estado'), alt.Tooltip('mes', title='Mês')]
                 ).properties(
                 width=900,
                 height=600
             )
             st.altair_chart(plot)
+        with cll3:
             st.info("Info")
-            st.markdown(f"classe 1: <= {(1/5)*filteredd['n_incendios'].max()}")
-            st.markdown(f"classe 2: <= {(2/5)*filteredd['n_incendios'].max()}")
-            st.markdown(f"classe 3: <= {(3/5)*filteredd['n_incendios'].max()}")
-            st.markdown(f"classe 4: <= {(4/5)*filteredd['n_incendios'].max()}")
-            st.markdown(f"classe 5: <= {(5/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 1: $\leq$ {(1/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 2: $\leq$ {(2/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 3: $\leq$ {(3/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 4: $\leq$ {(4/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 5: $\leq$ {(5/5)*filteredd['n_incendios'].max()}")
+
+            
+        #st.write(fire)
+        st.markdown("""
+        ---
+
+        ## Queimadas por ano""")
+        plot = alt.Chart(fire, title="Queimadas por ano").mark_rect().encode(
+                x=alt.X('mes:N', title='Mês', sort=[i.capitalize() for i in meses]),
+                y=alt.Y('estado:N', title="Estado"),
+                #color=alt.Color(f'{metrics[metric_option][0]}:Q', title='Quantidade de Incêndios',
+                color=alt.Color(f'n_incendios:Q', title='Quantidade de Incêndios', legend=alt.Legend(),
+                #legend=alt.Legend()
+                #scale=alt.Scale(scheme='category10')),
+                ),
+                #color='n_incendios:Q',
+            #tooltip=[alt.Tooltip(metrics[metric_option][0], title=metric_option), alt.Tooltip('estado', title='Estado'), 
+                    # alt.Tooltip('mes', title='Mês'), alt.Tooltip('classes:N', title='Classe')]
+            tooltip=[alt.Tooltip('n_incendios', title='Queimadas'), alt.Tooltip('estado', title='Estado'), alt.Tooltip('ano', title="Ano"), alt.Tooltip('mes', title='Mês')]
+            ).properties(
+                width=200,
+                height=200).facet(
+            facet=alt.Facet('ano:N', title="Queimadas por ano"),
+            columns=4,
+            #column = alt.Column("ano:N", title="None")
+                #row = alt.Row("ano:N", title=None)
+                ).configure_title(fontSize=24)
+        st.altair_chart(plot)
         '''
         elif metric_option == list(metrics.keys())[1]:
             pass

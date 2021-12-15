@@ -4,7 +4,6 @@ import pandas as pd
 import altair as alt
 import streamlit as st
 from math import ceil
-import requests
 
 
 def app():
