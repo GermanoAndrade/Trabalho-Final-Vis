@@ -10,13 +10,14 @@ proposto a tentativa de analisar esses dados e suas relações por meio de visua
 
 Para isso, foram escolhidas as seguintes bases:
 
-- [$\color{cyan}{\text{Forest Fires in Brazil}}$](https://www.kaggle.com/gustavomodelli/forest-fires-in-brazil) 
+
+- [`Forest Fires in Brazil`](https://www.kaggle.com/gustavomodelli/forest-fires-in-brazil) 
 
 <div align="center">
 	<img src="https://raw.githubusercontent.com/GermanoAndrade/Trabalho-Final-Vis/main/img/fire_br.png", width="400px">
 </div>
 
-- [$\color{cyan}{\text{Climate Weather Surface of Brazil}}$](https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region?select=central_west.csv)
+- [`Climate Weather Surface of Brazil`](https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region?select=central_west.csv)
 
  
 <div align="center">
@@ -24,7 +25,7 @@ Para isso, foram escolhidas as seguintes bases:
 </div>
 
 
-- [$\color{cyan}{\text{Desmatamento PRODES}}$](https://basedosdados.org/dataset/b9528c5f-3b31-4383-9e60-51e34e6b9237)
+- [`Desmatamento PRODES`](https://basedosdados.org/dataset/b9528c5f-3b31-4383-9e60-51e34e6b9237)
 
  
 <div align="center">
@@ -58,6 +59,49 @@ A partir daí, com base na estrutura e nos dados do dataframe completo, a ideia 
 <div align="center">
 	<img src="https://raw.githubusercontent.com/GermanoAndrade/Trabalho-Final-Vis/main/img/exemplo_mapa.png" width="600px">
 	<figcaption>Análise Geoespacial	</figcaption>
+</div>
+
+## Aplicação
+
+A aplicação, que pode ser acessada através desse [link](https://final-proj-vis.herokuapp.com/), tem a finalidade de apresentar os resultados 
+gráficos produzidos.
+
+### Menu
+
+Através do seu menu, é possível navegar entre as páginas disponíveis.
+<div align="center">
+	<img src="/img/menu_app.png" width="250px">
+</div>
+
+### Heatmap
+
+Na página de heatmap, é possível encontrar as seguintes visualizações
+
+<div align="center">
+	<img src="/img/heatmap_queimada.png">
+</div>
+
+<div align="center">
+	<img src="/img/queimadas_por_ano.png">
+</div>
+
+
+<div align="center">
+	<img src="/img/precipitacao.png">
+</div>
+
+
+<div align="center">
+	<img src="/img/desmatamento.png">
+</div>
+
+### Mapa
+
+Na página mapa, é possível comparar os mapas segundo as métricas desejadas.
+
+
+<div align="center">
+	<img src="/img/mapas.png">
 </div>
 
 
