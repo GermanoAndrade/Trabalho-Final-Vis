@@ -84,17 +84,23 @@ def app():
     cl1, cl2, cl3 = st.columns((0.5,5,0.5))
     with cl2:
         value = st.slider("Selecione o ano", min_year, max_year, value = ceil((min_year+max_year)/2),step=1)
+        region = st.multiselect("Selecione a região", ["Todas", *list(set(fire['region'].unique()).intersection(fire1['region'].unique()))], default="Todas")
     #st.write(second_map)
 
-    filtered = lambda df, x: df[df['ano'] == value].groupby(['estado', 'codigo'], as_index=False)[x].sum()
+    
+    def filtered (df, x):
+        df = df[df['region'].isin(region)] if ("Todas" not in region) else df
+        return df[df['ano'] == value].groupby(['estado', 'codigo'], as_index=False)[x].sum()
+    #filtered = lambda df, x: df[df['ano'] == value].groupby(['estado', 'codigo'], as_index=False)[x].sum()
 
-    wildfires = fire[fire['ano'] == value].groupby(['estado', 'codigo'], as_index=False)['n_incendios'].sum()
+
+    '''wildfires = fire[fire['ano'] == value].groupby(['estado', 'codigo'], as_index=False)['n_incendios'].sum()
     rain = fire[fire['ano'] == value].groupby(['estado', 'codigo'], as_index=False)['PRECIPITAÇÃO TOTAL, HORÁRIO (mm)'].sum()
     deforestation = fire[fire['ano'] == value].groupby(['estado', 'codigo'], as_index=False)['incremento'].sum()
     #TODO: adicionar subtipos quando escolher precipitação ou desmatamento (precipitação, temp. média, etc)
     chosen_df = {"Queimada": wildfires,
                  "Precipitação": rain,
-                 "Desmatamento": deforestation}
+                 "Desmatamento": deforestation}'''
 
     '''if metric_option == list(metrics.keys())[1]:
         pass
@@ -108,7 +114,7 @@ def app():
             stroke='lightgray'
         ).encode(
             color=alt.Color(f'{metrics[first_map][0]}:Q', title=f'Quantidade de {first_map}', 
-            scale=alt.Scale(scheme='redblue', reverse=(first_map != "Precipitação")),
+            scale=alt.Scale(scheme='blues' if first_map == "Precipitação" else 'reds' if first_map == "Queimada" else 'browns', reverse=False),
             legend=alt.Legend(orient='top')),
             tooltip = [alt.Tooltip("estado:N"), alt.Tooltip(f'{metrics[first_map][0]}:Q')]
         ).transform_lookup(
@@ -129,7 +135,7 @@ def app():
             stroke='lightgray'
         ).encode(
             color=alt.Color(f'{metrics[second_map][0]}:Q', title=f'Quantidade de {second_map}', 
-            scale=alt.Scale(scheme='redblue', reverse=second_map != "Precipitação"),
+            scale=alt.Scale(scheme='blues' if second_map == "Precipitação" else 'reds' if second_map == "Queimada" else 'browns', reverse=False),
             legend=alt.Legend(orient='top')),
             tooltip = [alt.Tooltip("estado:N"), alt.Tooltip(f'{metrics[second_map][0]}:Q')]
         ).transform_lookup(

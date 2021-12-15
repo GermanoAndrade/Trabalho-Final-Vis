@@ -30,8 +30,8 @@ st.sidebar.markdown("""
 ---
 
 Germano Andrade | Dezembro, 2021  
-[Github](https://github.com/GermanoAndrade/)
+[<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="30px"> Github](https://github.com/GermanoAndrade/)
 
-""")
+""", unsafe_allow_html=True)
 page.app()
 

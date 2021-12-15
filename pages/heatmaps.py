@@ -63,9 +63,24 @@ def app():
     meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 
             'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 
-    if metric_option != list(metrics.keys())[2]:
-        value = st.slider("selecione o ano", min_year, max_year, value = ceil((min_year+max_year)/2),step=1)
+    if metric_option == list(metrics.keys())[0]:
+        mid = ceil((min_year+max_year)/2)
+        value = st.slider("Selecione o ano", min_year, max_year, value = (mid-2, mid+2),step=1)
+    elif metric_option != list(metrics.keys())[2]:
+        value = st.slider("Selecione o ano", min_year, max_year, value = ceil((min_year+max_year)/2),step=1)
         #st.write(value)
+
+    def classes(x, max):
+        if x <= (1/5)*max:
+            return '1'
+        elif x <= (2/5)*max:
+            return '2'
+        elif x <= (3/5)*max:
+            return '3'
+        elif x <= (4/5)*max:
+            return '4'
+        elif x <= (5/5)*max:
+            return '5'
 
     if metric_option == list(metrics.keys())[1]:
         #precip_option = st.radio("Selecione a métrica", fire[])
@@ -76,7 +91,7 @@ def app():
             plot = alt.Chart(fire[fire['ano'] == value], title=f"Precipitação - Ano de {value}").mark_rect().encode(
                     x=alt.X('mes:N', title='Mês', sort=[i.capitalize() for i in meses]),
                     y=alt.Y('estado:N', title="Estado"),
-                    color=alt.Color(f'{metrics[metric_option][0]}:Q', legend=alt.Legend(orient='top')),
+                    color=alt.Color(f'{metrics[metric_option][0]}:Q', legend=alt.Legend(title = "Precipitação Total (mm)", orient='top')),
                     #color='n_incendios:Q',
                 tooltip=[alt.Tooltip(metrics[metric_option][1], title=metric_option), alt.Tooltip('estado', title='Estado'), alt.Tooltip('mes', title='Mês')]
                 #tooltip=[alt.Tooltip('n_incendios', title='Queimadas'), alt.Tooltip('estado', title='Estado'), alt.Tooltip('mes', title='Mês')]
@@ -103,7 +118,11 @@ def app():
 
         add_or_remove = st.radio("Selecione uma opção", ["Adicionar", "Remover"])
         a_r_dict = {"Adicionar": "Todos", "Remover": "Nenhum"}
+        #cll1, cll2 = st.columns((3,2))  
+        #with cll1:
         multiselect = st.multiselect(f"Selecione os estados para {add_or_remove.lower()}", options=[a_r_dict[add_or_remove], *fire['estado'].unique()], default=a_r_dict[add_or_remove])
+        #with cll2:
+           # multiselect_estado = st.multiselect(f"Selecione as regiões para {add_or_remove.lower()}", options=[a_r_dict[add_or_remove], *fire['region'].unique()], default=a_r_dict[add_or_remove])
         #st.write(multiselect)
         
         #state = st.selectbox("Selecione o Estado", ["-", *fire['estado'].unique()])
@@ -128,11 +147,15 @@ def app():
         st.altair_chart(plot)
     else:
         with st.columns((0.5,5,0.5))[1]:
-            plot = alt.Chart(fire[fire['ano'] == value], title=f"Ano de {value}").mark_rect().encode(
+            filteredd = fire[fire['ano'].isin(value)]
+            filteredd['classes'] =filteredd['n_incendios'].apply(lambda x: classes(x, filteredd['n_incendios'].max()))
+            #st.write(fire)
+            plot = alt.Chart(filteredd, title=f"Anos de {value[0]} a {value[1]}").mark_rect().encode(
                     x=alt.X('mes:N', title='Mês', sort=[i.capitalize() for i in meses]),
                     y=alt.Y('estado:N', title="Estado"),
-                    color=alt.Color(f'{metrics[metric_option][0]}:Q', title='Quantidade de Incêndios',
-                    #legend=alt.Legend(orient='top')
+                    #color=alt.Color(f'{metrics[metric_option][0]}:Q', title='Quantidade de Incêndios',
+                    color=alt.Color(f'classes:N', title='Quantidade de Incêndios', legend=alt.Legend()
+                    #legend=alt.Legend()
                     ),
                     #color='n_incendios:Q',
                 tooltip=[alt.Tooltip(metrics[metric_option][0], title=metric_option), alt.Tooltip('estado', title='Estado'), alt.Tooltip('mes', title='Mês')]
@@ -142,6 +165,12 @@ def app():
                 height=600
             )
             st.altair_chart(plot)
+            st.info("Info")
+            st.markdown(f"classe 1: <= {(1/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 2: <= {(2/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 3: <= {(3/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 4: <= {(4/5)*filteredd['n_incendios'].max()}")
+            st.markdown(f"classe 5: <= {(5/5)*filteredd['n_incendios'].max()}")
         '''
         elif metric_option == list(metrics.keys())[1]:
             pass

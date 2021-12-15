@@ -1,39 +1,20 @@
-import streamlit as st
+# Trabalho Final
 
 
-def app():
-    col1, col2 = st.columns((4,1.5))
-    with col1:
-        st.title('Sobre')
-        st.markdown("---")
-    with col2:
-        st.image("https://raw.githubusercontent.com/GermanoAndrade/AED-Listas/main/Lista%203/Quest%C3%B5es/Cap%C3%ADtulo%204/FGV-EMAp.png")
-
-
-    st.markdown("""[<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="30px"> Repositório](https://github.com/GermanoAndrade/Trabalho-Final-Vis)"""
-    ,unsafe_allow_html=True)
-
-
-    with open('README.md', 'r', encoding='utf-8') as md:
-        readme = md.read()
-
-    st.markdown("\n")
-    st.markdown(readme[16:], unsafe_allow_html=True)
-    st.markdown("""
-    ### Bases
+### Bases
 
 Para esse trabalho, a partir da junção de dados de queimadas, dados meteorológicos e dados de desmatamento, foi
 proposto a tentativa de analisar esses dados e suas relações por meio de visualizações interativas.  
 
 Para isso, foram escolhidas as seguintes bases:
 
-- [Forest Fires in Brazil](https://www.kaggle.com/gustavomodelli/forest-fires-in-brazil) 
+- [$\color{cyan}{\text{Forest Fires in Brazil}}$](https://www.kaggle.com/gustavomodelli/forest-fires-in-brazil) 
 
 <div align="center">
 	<img src="https://raw.githubusercontent.com/GermanoAndrade/Trabalho-Final-Vis/main/img/fire_br.png", width="400px">
 </div>
 
-- [Climate Weather Surface of Brazil](https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region?select=central_west.csv)
+- [$\color{cyan}{\text{Climate Weather Surface of Brazil}}$](https://www.kaggle.com/PROPPG-PPG/hourly-weather-surface-brazil-southeast-region?select=central_west.csv)
 
  
 <div align="center">
@@ -41,7 +22,7 @@ Para isso, foram escolhidas as seguintes bases:
 </div>
 
 
-- [Desmatamento PRODES](https://basedosdados.org/dataset/b9528c5f-3b31-4383-9e60-51e34e6b9237)
+- [$\color{cyan}{\text{Desmatamento PRODES}}$](https://basedosdados.org/dataset/b9528c5f-3b31-4383-9e60-51e34e6b9237)
 
  
 <div align="center">
@@ -80,4 +61,8 @@ A partir daí, com base na estrutura e nos dados do dataframe completo, a ideia 
 
 
 
-    """, unsafe_allow_html=True)
+
+
+
+
+
